@@ -12,9 +12,23 @@ pub mod mi_contador {
         Ok(())
     }
 
-    pub fn incrementar(ctx: Context<Increment>) -> Result<()> {
+    pub fn incrementar(ctx: Context<Update>) -> Result<()> {
         let contador = &mut ctx.accounts.contador;
         contador.valor += 1;
+        Ok(())
+    }
+
+    pub fn decrementar(ctx: Context<Update>) -> Result<()> {
+        let contador = &mut ctx.accounts.contador;
+        if contador.valor > 0 {
+            contador.valor -= 1;
+        }
+        Ok(())
+    }
+
+    pub fn reiniciar(ctx: Context<Update>) -> Result<()> {
+        let contador = &mut ctx.accounts.contador;
+        contador.valor = 0;
         Ok(())
     }
 }
@@ -29,7 +43,7 @@ pub struct Initialize<'info> {
 }
 
 #[derive(Accounts)]
-pub struct Increment<'info> {
+pub struct Update<'info> {
     #[account(mut)]
     pub contador: Account<'info, Contador>,
 }
